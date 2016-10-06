@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- 
+ng-app usado durante a inicialização do angular js
+-->
+<html ng-app="exampleApp" >
+<head>
+	<meta charset="UTF-8">
+<title>AngularJS Demo</title>
+<link href="bootstrap.css" rel="stylesheet" />
+<link href="bootstrap-theme.css" rel="stylesheet" />
+<script src="angular.min.js"></script>
+<script>
+
+	var myApp = angular.module("exampleApp", []);
+
+	myApp.controller("ctrl", function ($scope) {
+
+		$scope.assuntos = ["modulos", "controladores", "serviços", "filtros", "diretivas"];	
+
+		$scope.temp = "";
+
+		$scope.remove = function(assunto){
+
+			var aRemover = $scope.assuntos.indexOf(assunto);
+
+			$scope.assuntos.splice(aRemover, 1);
+
+		};
+
+		$scope.insert = function(){
+			$scope.assuntos.push($scope.temp);
+			$scope.temp = null;
+		};
+
+	});
+
+
+</script>
+</head>
+
+	<body>
+		<div class="panel" ng-controller="ctrl">
+			<div class="page-header">
+			</div>
+
+			<div>
+				<h1>Assuntos Angularjs</h1>
+				<h3 ng-repeat="assunto in assuntos" >
+					{{assunto}} <button ng-click="remove(assunto)" >remove</button>
+				</h3>
+			</div>
+
+			<div>
+				<h1>Inserir assunto</h1>
+				<input type="text" ng-model="temp"/>
+				<button ng-click="insert()" >Inserir {{temp}}</button>
+			</div>
+		
+
+			
+
+		</div>
+	</body>
+
+</html>
