@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!-- 
+ng-app usado durante a inicialização do angular js
+-->
+<html ng-app="exampleApp" >
+<head>
+	<meta charset="UTF-8">
+<title>AngularJS Demo</title>
+<link href="bootstrap.css" rel="stylesheet" />
+<link href="bootstrap-theme.css" rel="stylesheet" />
+<script src="angular.min.js"></script>
+<script>
+
+	var myApp = angular.module("exampleApp", []);
+
+	myApp.controller("dayCtrl", function ($scope, days) {
+
+		$scope.day =  new Date().getDay();
+
+		$scope.today = days.today;
+		$scope.tomorrow = days.tomorrow;
+
+			
+	});
+
+	myApp.directive("highlight", function($filter){
+		
+		var dayNameFilter = $filter("dayNameFilter");
+
+		return function(scope, element, attrs){
+			if(  dayNameFilter( scope.day ) == attrs['highlight'] ){
+				element.css("color", "red");
+			}
+		}
+
+	});
+
+
+
+	myApp.filter("dayNameFilter", function(){
+
+		var dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
+
+		return function(numeroDiaSem){
+
+			if( angular.isNumber(numeroDiaSem) ){
+				return dayNames[ numeroDiaSem % 7 ];
+			}
+			else{
+				return "Dia não reconhecido";
+			}
+
+		};
+
+	});
+
+
+	myApp.service("days", function(){
+
+		this.today = new Date().getDay();
+		this.tomorrow = this.today + 1; 
+
+	});
+
+</script>
+</head>
+
+	<body>
+		<div class="panel" ng-controller="dayCtrl">
+			<div class="page-header">
+				<h3>AngularJS App</h3>
+			</div>
+			<h4 highlight="Quinta" >Hoje é {{day | dayNameFilter}} feira</h4>
+			<hr>
+			<h4> Amanhã é {{tomorrow | dayNameFilter}} </h4>
+		
+
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- 
+ng-app usado durante a inicialização do angular js
+-->
+<html ng-app="exampleApp" >
+<head>
+	<meta charset="UTF-8">
+<title>AngularJS Demo</title>
+<link href="bootstrap.css" rel="stylesheet" />
+<link href="bootstrap-theme.css" rel="stylesheet" />
+<script src="angular.min.js"></script>
+<script>
+	
+	/*
+		modulo que será usado pelo html -> aplicação angular
+		convenção de nome: *App
+		-------------------------------------------------
+
+		angular.module("exampleApp") sem as dependencias (mesmo vazia) tenta localizar o módulo 'exampleApp', causando erro.
+		-------------------------------------------------
+
+		$scope - um dos serviços embutidos do angular, automaticamente injetado caso declarado como parametro do construtor do controlador
+	
+		é através do $scope que o controlador pode passar dados para a visão
+	*/
+	var myApp = angular.module("exampleApp", []);
+	//controle é criado com new
+	myApp.controller("dayCtrl", function ($scope) {
+
+		/*
+			para que a var day seja acessivel pela visão, é necessário associar day como uma propriedade de $scope
+		*/
+		var dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
+		$scope.day = dayNames[ new Date().getDay() ];
+
+		$scope.tomorrow = dayNames[ (new Date().getDay() + 1) % 7];
+			
+	});
+
+	myApp.controller("outroCtrl", function(){
+
+		var day = "segunda feira";
+
+		//esse nao possui nada
+
+	});
+
+
+	//factory function
+	//a diretiva não é criada com new
+	myApp.directive("highlight", function(){
+
+		//worker function
+		return function(scope, element, attrs){
+			if(scope.day == attrs['highlight'] ){
+				element.css("color", "red");
+			}
+		}
+
+	});
+
+
+
+	myApp.filter("dayNameFilter", function(){
+
+		var dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
+
+		return function(numeroDiaSem){
+
+			if( angular.isNumber(numeroDiaSem) ){
+				return dayNames[ numeroDiaSem % 7 ];
+			}
+			else{
+				return "Dia não reconhecido";
+			}
+
+		};
+
+	});
+
+	myApp.filter("upperCase", function(){
+
+		return function(word){
+
+			return word.toUpperCase();
+
+		};
+
+	});
+
+	myApp.directive("highlight2", function($filter){
+
+		var dayFilter = $filter("upperCase");
+
+		return function(scope, element, attrs){
+			if(dayFilter(scope.day) == attrs['highlight'] ){
+				element.css("color", "red");
+			}
+		}
+
+	});
+
+</script>
+</head>
+
+	<body>
+		<div class="panel" ng-controller="dayCtrl">
+			<div class="page-header">
+				<h3>AngularJS App</h3>
+			</div>
+			<h4>Hoje é {{day || "(unknown)"}}</h4>
+			<h4 ng-controller="dayCtrl">Amanhã é {{tomorrow || "(unknown)"}}</h4>
+		</div>
+
+		<div ng-controller="outroCtrl">
+			<h4>Tentando ver valor de day : {{day}}</h4>
+		</div>
+
+		<div ng-controller="dayCtrl">
+			<!-- chama a worker function -->
+			<!-- workerFunc(dayCtrl.$scope, h4, {"highlight":"Quinta", "id":"h4direc"} ) -->
+			<h4 id="h4direc" highlight="Quinta"> diretiva hightlight COM o escopo do controlador dayCtrl </h4>
+		</div>
+
+		<div >
+
+			<h4 highlight="Quinta"> diretiva hightlight SEM o escopo do controlador dayCtrl </h4>
+		</div>
+
+
+		<div>
+
+			<h4>Teste com filtro dayNameFilter, aplicando 23</h4>
+			<h4> hoje é  {{ 23 | dayNameFilter }}</h4>
+
+			<h4>Teste com filtro dayNameFilter, aplicando 'vmvini'</h4>
+			<h4> hoje é  {{ "vmvini" | dayNameFilter }}</h4>
+
+			<h4>Teste com filtro dayNameFilter e upperCase, aplicando 4</h4>
+			<h4> hoje é  {{ 4 | dayNameFilter | upperCase }}</h4>
+
+		</div>
+
+	</body>
+
+</html>

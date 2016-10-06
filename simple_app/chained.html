@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- 
+ng-app usado durante a inicialização do angular js
+-->
+<html ng-app="exampleApp" >
+<head>
+	<meta charset="UTF-8">
+<title>AngularJS Demo</title>
+<link href="bootstrap.css" rel="stylesheet" />
+<link href="bootstrap-theme.css" rel="stylesheet" />
+<script src="angular.min.js"></script>
+<script>
+	angular.module("exampleApp", [])
+		.controller("dayCtrl", function ($scope) {
+
+			var dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
+			$scope.day = dayNames[ new Date().getDay() ];
+			$scope.tomorrow = dayNames[ (new Date().getDay() + 1) % 7];
+
+		}).controller("outroCtrl", function(){
+
+			var day = "segunda feira";
+		});
+
+</script>
+</head>
+
+	<body>
+		<div class="panel" ng-controller="dayCtrl">
+			<div class="page-header">
+				<h3>AngularJS App</h3>
+			</div>
+			<h4>Hoje é {{day || "(unknown)"}}</h4>
+			<h4 ng-controller="dayCtrl">Amanhã é {{tomorrow || "(unknown)"}}</h4>
+		</div>
+
+		<div ng-controller="outroCtrl">
+			<h4>Tentando ver valor de day : {{day}}</h4>
+		</div>
+
+	</body>
+
+</html>
