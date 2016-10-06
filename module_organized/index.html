@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- 
+ng-app usado durante a inicialização do angular js
+-->
+<html ng-app="myApp" >
+<head>
+	<meta charset="UTF-8">
+<title>AngularJS Demo</title>
+<link href="bootstrap.css" rel="stylesheet" />
+<link href="bootstrap-theme.css" rel="stylesheet" />
+<script src="angular.min.js"></script>
+
+
+<script src="angularApp.js"></script>
+<script src="controllers.js"></script>
+<script src="services.js"></script>
+	
+</head>
+
+	<body>
+		<div class="panel" ng-controller="ctrl2">
+			Controlador ativo: {{ctrl}}
+		</div>
+
+	</body>
+
+</html>
